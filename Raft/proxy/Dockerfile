@@ -5,7 +5,7 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Copiar el archivo raft.proto desde la raíz del proyecto
-COPY ../raft.proto ./
+COPY raft.proto ./
 
 # Compilar el archivo proto para generar los archivos necesarios
 RUN python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. raft.proto

@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  leader:
+    build:
+      context: ./leader
+      dockerfile: Dockerfile
+    ports:
+      - "50051:50051"  # Exponer el puerto del líder
+    networks:
+      - raft_network
+
+  follower:
+    build:
+      context: ./follower
+      dockerfile: Dockerfile
+    ports:
+      - "50052:50052"  # Exponer el puerto del seguidor
+    networks:
+      - raft_network
+
+  proxy:
+    build:
+      context: ./proxy
+      dockerfile: Dockerfile
+    ports:
+      - "50053:50053"  # Exponer el puerto del proxy
+    networks:
+      - raft_network
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    depends_on:
+      - leader  # El cliente depende del líder
+      - follower  # El cliente puede comunicarse con el seguidor
+    networks:
+      - raft_network
+
+networks:
+  raft_network:
+    driver: bridge

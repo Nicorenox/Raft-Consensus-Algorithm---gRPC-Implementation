@@ -7,6 +7,9 @@ WORKDIR /app
 # Copia el archivo proto
 COPY raft.proto ./
 
+# Copiar los archivos del proyecto a la imagen
+COPY . .
+
 # Instala las dependencias necesarias
 RUN pip install grpcio grpcio-tools
 

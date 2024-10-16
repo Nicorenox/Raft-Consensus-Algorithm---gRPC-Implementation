@@ -1,7 +1,7 @@
 import grpc
 import logging
 from concurrent import futures
-from raft_pb2 import GetDataRequest, GetDataResponse, PutDataRequest, PutDataResponse
+from raft_pb2 import GetDataRequest, PutDataRequest
 from raft_pb2_grpc import RaftServiceServicer, add_RaftServiceServicer_to_server, RaftServiceStub
 
 # Configurar el logging

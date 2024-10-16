@@ -6,7 +6,7 @@ from raft_pb2 import AppendEntriesRequest, GetDataResponse, PutDataRequest, GetD
 from raft_pb2_grpc import RaftServiceServicer, add_RaftServiceServicer_to_server, RaftServiceStub
 
 # Configurar el logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class RaftLeader(RaftServiceServicer):
     def __init__(self):

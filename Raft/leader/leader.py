@@ -2,8 +2,8 @@ import grpc
 import logging
 import time
 from concurrent import futures
-from raft_pb2 import AppendEntriesRequest, AppendEntriesResponse, PutDataRequest, GetDataRequest, GetDataResponse
-from raft_pb2_grpc import RaftServiceServicer, add_RaftServiceServicer_to_server
+from raft_pb2 import AppendEntriesRequest, GetDataResponse, PutDataRequest, GetDataRequest
+from raft_pb2_grpc import RaftServiceServicer, add_RaftServiceServicer_to_server, RaftServiceStub
 
 # Configurar el logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

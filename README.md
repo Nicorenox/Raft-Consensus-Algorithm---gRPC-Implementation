@@ -93,4 +93,6 @@ The system uses Python's built-in `logging` module to provide detailed logs for 
 
 You can adjust the verbosity of the logs by changing the logging level in the code (`DEBUG`, `INFO`, `WARNING`, `ERROR`).
 
-## 
+## Author
+
+- Developed by [Nicolas Moreno Lopez](https://github.com/Nicorenox)

@@ -5,7 +5,7 @@ from raft_pb2 import GetDataRequest, PutDataRequest
 from raft_pb2_grpc import RaftServiceServicer, add_RaftServiceServicer_to_server, RaftServiceStub
 
 # Configurar el logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class RaftProxyServicer(RaftServiceServicer):
     def __init__(self, leader_ip):

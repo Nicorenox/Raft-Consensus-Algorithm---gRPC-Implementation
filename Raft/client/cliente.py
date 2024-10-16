@@ -11,14 +11,12 @@ def main():
         stub = RaftServiceStub(channel)
         
         # Ejemplo de escritura
-        key = "test_key"
-        value = "test_value"
-        response = stub.PutData(PutDataRequest(key=key, data=value))
-        logging.info("Respuesta de escritura: %s", response.success)
+        put_response = stub.PutData(PutDataRequest(key='key1', data='value1'))
+        logging.info("Respuesta de PutData: %s", put_response.success)
 
         # Ejemplo de lectura
-        response = stub.GetData(GetDataRequest(key=key))
-        logging.info("Respuesta de lectura: %s", response.value)
+        get_response = stub.GetData(GetDataRequest(key='key1'))
+        logging.info("Respuesta de GetData: %s", get_response.value)
 
 if __name__ == '__main__':
     main()

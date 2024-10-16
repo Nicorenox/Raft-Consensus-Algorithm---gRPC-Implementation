@@ -16,6 +16,6 @@ RUN pip install grpcio grpcio-tools
 # Compila el archivo proto
 RUN python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. raft.proto
 
-EXPOSE 50050 50051 50052 50053 50054
+EXPOSE 50050 50051 50052 50053
 # Comando para ejecutar el cliente
-CMD ["python", "client.py"]
+CMD ["python", "cliente.py"]

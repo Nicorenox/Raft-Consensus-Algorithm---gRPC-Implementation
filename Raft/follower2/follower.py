@@ -2,7 +2,7 @@ import grpc
 import logging
 import time
 from concurrent import futures
-from raft_pb2 import AppendEntriesRequest, GetDataResponse, PutDataRequest, GetDataRequest
+from raft_pb2 import AppendEntriesRequest, AppendEntriesResponse, VoteRequest, VoteResponse
 from raft_pb2_grpc import RaftServiceServicer, add_RaftServiceServicer_to_server, RaftServiceStub
 
 # Configurar el logging
@@ -12,22 +12,13 @@ class RaftFollower(RaftServiceServicer):
     def __init__(self, follower_id):
         self.current_term = 0
         self.voted_for = None
-        self.log = {}
+        self.log = []
         self.commit_index = 0
         self.last_applied = 0
         self.follower_id = follower_id
         self.leader_timeout = 3  # Timeout para heartbeat
         self.last_heartbeat = time.time()
         logging.info("Seguidor %s inicializado", follower_id)
-
-    def PutData(self, request, context):
-        logging.warning("Solicitud de escritura recibida en el seguidor, no se permite.")
-        return GetDataResponse(success=False)
-
-    def GetData(self, request, context):
-        logging.info("Recibiendo solicitud de lectura para la clave: %s", request.key)
-        value = self.log.get(request.key, "No existe")
-        return GetDataResponse(value=value)
 
     def AppendEntries(self, request, context):
         if request.term < self.current_term:
@@ -77,4 +68,4 @@ def serve(follower_id, port):
         server.stop(0)
 
 if __name__ == '__main__':
-    serve("follower1", 50051)
+    serve("follower2", 50052)

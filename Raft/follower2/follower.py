@@ -24,10 +24,27 @@ class RaftFollower(RaftServiceServicer):
         if request.term < self.current_term:
             logging.warning("Término de AppendEntries es menor al término actual en el seguidor.")
             return AppendEntriesResponse(term=self.current_term, success=False)
+        
+        # Actualiza el término y reinicia el temporizador de heartbeat
         self.current_term = request.term
-        self.last_heartbeat = time.time()  # Resetear el temporizador de heartbeat
-        logging.info("Heartbeat recibido, término actualizado a %d", self.current_term)
+        self.last_heartbeat = time.time()  
+        logging.info("Heartbeat recibido del líder con término %d", self.current_term)
         return AppendEntriesResponse(term=self.current_term, success=True)
+
+    def RequestVote(self, request, context):
+        logging.info("Solicitud de voto recibida para el término %d desde %s", request.term, request.candidateId)
+        if request.term < self.current_term:
+            logging.warning("Solicitud de voto con término %d es menor que el término actual %d", request.term, self.current_term)
+            return VoteResponse(term=self.current_term, voteGranted=False)
+        
+        if self.voted_for is None or self.voted_for == request.candidateId:
+            self.voted_for = request.candidateId
+            self.current_term = request.term
+            logging.info("Voto concedido a %s", request.candidateId)
+            return VoteResponse(term=self.current_term, voteGranted=True)
+
+        logging.info("Voto ya concedido a otro candidato: %s", self.voted_for)
+        return VoteResponse(term=self.current_term, voteGranted=False)
 
     def check_leader_timeout(self):
         if time.time() - self.last_heartbeat > self.leader_timeout:
@@ -68,4 +85,4 @@ def serve(follower_id, port):
         server.stop(0)
 
 if __name__ == '__main__':
-    serve("follower2", 50052)
+    serve("follower1", 50051)

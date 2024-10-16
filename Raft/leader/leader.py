@@ -35,8 +35,12 @@ class RaftLeader(RaftServiceServicer):
                     try:
                         logging.info("Enviando heartbeat al seguidor %s", follower)
                         response = stub.AppendEntries(AppendEntriesRequest(term=self.current_term, leaderId="leader"))
-                    except grpc.RpcError:
-                        logging.error("Seguidor %s caído.", follower)
+                        if response.success:
+                            logging.info("Heartbeat enviado exitosamente a %s", follower)
+                        else:
+                            logging.warning("Heartbeat fallido para %s, término desactualizado.", follower)
+                    except grpc.RpcError as e:
+                        logging.error("Error al enviar heartbeat a %s: %s", follower, e)
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))

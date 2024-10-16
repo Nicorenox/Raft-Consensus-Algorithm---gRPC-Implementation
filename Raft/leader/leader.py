@@ -2,31 +2,21 @@ import grpc
 import logging
 import time
 from concurrent import futures
-from raft_pb2 import AppendEntriesRequest, GetDataResponse, PutDataRequest, GetDataRequest
-from raft_pb2_grpc import RaftServiceServicer, add_RaftServiceServicer_to_server, RaftServiceStub
+from raft_pb2 import AppendEntriesRequest, AppendEntriesResponse
+from raft_pb2_grpc import RaftServiceServicer, add_RaftServiceServicer_to_server
 
 # Configurar el logging
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class RaftLeader(RaftServiceServicer):
     def __init__(self):
         self.current_term = 0
         self.voted_for = None
-        self.log = {}
+        self.log = []
         self.commit_index = 0
         self.last_applied = 0
         self.followers = ["follower1:50051", "follower2:50052"]
         logging.info("Líder inicializado con seguidores: %s", self.followers)
-
-    def PutData(self, request, context):
-        logging.info("Recibiendo solicitud de escritura: %s", request.data)
-        self.log[request.key] = request.data
-        return GetDataResponse(success=True)
-
-    def GetData(self, request, context):
-        logging.info("Recibiendo solicitud de lectura para la clave: %s", request.key)
-        value = self.log.get(request.key, "No existe")
-        return GetDataResponse(value=value)
 
     def AppendEntries(self, request, context):
         if request.term < self.current_term:

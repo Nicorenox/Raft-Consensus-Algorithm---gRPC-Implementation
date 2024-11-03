@@ -1,6 +1,6 @@
-# Raft Consensus Algorithm - gRPC Implementation
+# Raft Project
 
-This project implements the **Raft consensus algorithm** using **gRPC** for communication between distributed nodes. The system is designed to ensure data consistency and fault tolerance across a cluster of servers. It includes **leaders**, **followers**, and **clients** that interact to maintain a replicated log and agree on state changes.
+This project implements a consensus system using the Raft algorithm in Python. The system consists of three nodes that simulate a working environment in a cluster, and a proxy that handles read and write operations. The architecture is designed to provide high availability and reliability through leadership and node voting.
 
 ## Introduction to Raft
 
@@ -12,28 +12,15 @@ Raft is a consensus algorithm that is much simpler to understand compared to Pax
 
 The Raft algorithm operates in terms of **terms**, where each term begins with an election. If a leader is successfully elected, it serves during that term; otherwise, a new term begins.
 
-## Components
+## Component Descriptions
 
-### Leader
-
-The leader is the node responsible for handling client requests, replicating logs to the followers, and sending periodic **heartbeats** to inform the followers that it is still active. If a follower does not receive a heartbeat within a specified time (the **election timeout**), it assumes that the leader has failed and starts a new election.
-
-- The leader sends `AppendEntries` RPCs (heartbeats) to followers periodically to prevent elections.
-- If a leader fails or becomes unreachable, a follower initiates an election to become the new leader.
-
-### Follower
-
-Followers are passive nodes that respond to the requests of the leader. They can also become candidates if they detect that the leader has failed (i.e., no heartbeat is received within the election timeout). Followers maintain the same log entries as the leader and apply the logs to their local state machine in the same order.
-
-- Followers can vote for a candidate during an election.
-- They store logs sent by the leader and send responses to `AppendEntries` requests.
-
-### Candidate
-
-When a follower does not receive heartbeats from a leader for a set period, it transitions into a candidate state. The candidate starts an election by increasing its term and sending `RequestVote` RPCs to other nodes. If the candidate receives a majority of votes, it becomes the new leader.
-
-- If a candidate wins the election (majority votes), it transitions into a leader state.
-- If no one wins the election within a timeout, a new term and election are started.
+- **server.py**: Implements the logic of the Raft algorithm, manages read and write operations, and handles leadership among nodes.
+- **client.py**: Allows the user to perform read and write operations through the proxy.
+- **proxy.py**: Acts as an intermediary between the client and nodes, redirecting requests as needed.
+- **Dockerfile**: Defines the configuration for the server image.
+- **Dockerfile.client**: Defines the configuration for the client image.
+- **Dockerfile.proxy**: Defines the configuration for the proxy image.
+- **docker-compose.yml**: Defines and runs the containers for the nodes and the proxy
 
 ## How the System Works
 

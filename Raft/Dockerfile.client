@@ -1,0 +1,15 @@
+# Usa una imagen base de Python
+FROM python:3.9-slim
+
+# Establece el directorio de trabajo
+WORKDIR /app
+
+# Copia el archivo del cliente
+COPY client.py /app/client.py
+COPY requirements.txt /app/requirements.txt
+
+# Instala las dependencias
+RUN pip install -r requirements.txt
+
+# Comando para iniciar el cliente
+CMD ["python", "client.py"]

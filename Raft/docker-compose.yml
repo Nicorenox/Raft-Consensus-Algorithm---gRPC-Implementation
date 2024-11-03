@@ -30,13 +30,6 @@ services:
     ports:
       - "5003:5000"
 
-  proxy:
-    build:
-      dockerfile: Dockerfile.proxy  
-    networks:
-      - raft_network
-    ports:
-      - "5004:5004"
 
 networks:
   raft_network:

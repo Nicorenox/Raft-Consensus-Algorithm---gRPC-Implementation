@@ -39,28 +39,11 @@ If the election results in a tie, the term ends without a leader, and a new elec
 
 ### Heartbeats
 
-The leader sends **heartbeats** to followers regularly to prevent them from starting an election. Heartbeats are a special case of the `AppendEntries` RPC, which includes no log entries but only a signal from the leader to maintain leadership status. This keeps the cluster stable as long as the leader is functioning properly.
+The leader sends **heartbeats** to followers regularly to prevent them from starting an election. This keeps the cluster stable as long as the leader is functioning properly.
 
 - Heartbeats are sent periodically (e.g., every second).
 - If a follower does not receive a heartbeat within the election timeout, it assumes the leader is down and starts a new election.
 
-### Log Replication
-
-The leader is responsible for accepting client commands, adding them to its own log, and replicating the logs across all followers. The followers then confirm they have stored the entries, and the leader applies the entries to its state machine once they are committed.
-
-1. **Client sends command**: The leader receives a command from a client.
-2. **Append entries**: The leader appends the command to its own log.
-3. **Replicate logs**: The leader sends the new log entry to all followers using `AppendEntries` RPCs.
-4. **Commit logs**: Once the majority of followers have stored the entry, the leader marks the entry as committed and applies it to its state machine.
-5. **Apply logs**: Followers apply committed logs in the same order as the leader.
-
-### Log Consistency
-
-Raft ensures consistency by maintaining the following invariants:
-
-1. If two logs on different servers are identical up to a certain point, then any subsequent logs must also be identical.
-2. If a follower is missing log entries, the leader will overwrite the follower's log to ensure that all nodes have the same log.
-3. A log entry is considered committed once the leader has replicated it to a majority of nodes.
 
 ### Handling Failures
 
@@ -77,9 +60,8 @@ The system uses Python's built-in `logging` module to provide detailed logs for 
 - **Leader**: Logs heartbeats sent to followers, log replication progress, and term updates.
 - **Follower**: Logs received heartbeats, votes cast during elections, and log entries received.
 - **Candidate**: Logs vote requests and election outcomes.
-- **Errors**: Any network failures or RPC errors are logged to help with debugging.
+- **Errors**: Any network failures errors are logged to help with debugging.
 
-You can adjust the verbosity of the logs by changing the logging level in the code (`DEBUG`, `INFO`, `WARNING`, `ERROR`).
 
 ## Author
 

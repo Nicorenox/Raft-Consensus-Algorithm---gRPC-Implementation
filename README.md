@@ -11,6 +11,7 @@ Raft is a consensus algorithm that is much simpler to understand compared to Pax
 3. **Safety**: Raft ensures that logs are applied in the same order across all nodes, guaranteeing consistency.
 
 The Raft algorithm operates in terms of **terms**, where each term begins with an election. If a leader is successfully elected, it serves during that term; otherwise, a new term begins.
+For a more visual explanation of the Raft algorithm, please visit [this page](https://thesecretlivesofdata.com/raft/).
 
 ## Component Descriptions
 

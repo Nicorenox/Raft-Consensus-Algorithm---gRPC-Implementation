@@ -1,0 +1,18 @@
+# Usa una imagen base de Python
+FROM python:3.9-slim
+
+# Establece el directorio de trabajo
+WORKDIR /app
+
+# Copia los archivos necesarios
+COPY proxy.py /app/proxy.py
+COPY requirements.txt /app/requirements.txt
+
+# Instala las dependencias
+RUN pip install -r requirements.txt
+
+# Expone el puerto 5004
+EXPOSE 5004
+
+# Comando para iniciar el proxy
+CMD ["python", "proxy.py"]
